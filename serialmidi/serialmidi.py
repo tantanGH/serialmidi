@@ -11,33 +11,34 @@ import argparse
 # Serial MIDI Bridge
 # Ryan Kojima
 
+def main():
 
-parser = argparse.ArgumentParser(description = "Serial MIDI bridge")
+  parser = argparse.ArgumentParser(description = "Serial MIDI bridge")
 
-parser.add_argument("--serial_name", type=str, required = True, help = "Serial port name. Required")
-parser.add_argument("--baud", type=int, default=115200, help = "baud rate. Default is 115200")
-parser.add_argument("--midi_in_name", type=str, default = "IAC Bus 1")
-parser.add_argument("--midi_out_name", type=str, default = "IAC Bus 2")
-parser.add_argument("--debug", action = "store_true", help = "Print incoming / outgoing MIDI signals")
+  parser.add_argument("--serial_name", type=str, required = True, help = "Serial port name. Required")
+  parser.add_argument("--baud", type=int, default=115200, help = "baud rate. Default is 115200")
+  parser.add_argument("--midi_in_name", type=str, default = "IAC Bus 1")
+  parser.add_argument("--midi_out_name", type=str, default = "IAC Bus 2")
+  parser.add_argument("--debug", action = "store_true", help = "Print incoming / outgoing MIDI signals")
 
-args = parser.parse_args()
+  args = parser.parse_args()
 
-thread_running = True
+  thread_running = True
 
-# Arguments
-serial_port_name = args.serial_name #'/dev/cu.SLAB_USBtoUART'
-serial_baud = args.baud
-given_port_name_in = args.midi_in_name #"IAC Bus 1"
-given_port_name_out = args.midi_out_name #"IAC Bus 2"
+  # Arguments
+  serial_port_name = args.serial_name #'/dev/cu.SLAB_USBtoUART'
+  serial_baud = args.baud
+  given_port_name_in = args.midi_in_name #"IAC Bus 1"
+  given_port_name_out = args.midi_out_name #"IAC Bus 2"
 
-if args.debug:
+  if args.debug:
     logging.basicConfig(level = logging.DEBUG)
-else:
+  else:
     logging.basicConfig(level = logging.INFO)
 
-midi_ready = False
-midiin_message_queue = queue.Queue()
-midiout_message_queue = queue.Queue()
+  midi_ready = False
+  midiin_message_queue = queue.Queue()
+  midiout_message_queue = queue.Queue()
 
 def get_midi_length(message):
     if len(message) == 0:
@@ -183,3 +184,7 @@ except KeyboardInterrupt:
     print("Terminating.")
     thread_running = False
     sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()
