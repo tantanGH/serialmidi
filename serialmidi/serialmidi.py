@@ -15,8 +15,8 @@ def main():
 
   parser = argparse.ArgumentParser(description = "Serial MIDI bridge")
 
-  parser.add_argument("--serial_name", type=str, required = True, help = "Serial port name. Required")
-  parser.add_argument("--baud", type=int, default=115200, help = "baud rate. Default is 115200")
+  parser.add_argument("serial_name", type=str, required = True, help = "Serial port name. Required")
+  parser.add_argument("--baud", type=int, default=9600, help = "baud rate. Default is 9600")
   parser.add_argument("--midi_in_name", type=str, default = "IAC Bus 1")
   parser.add_argument("--midi_out_name", type=str, default = "IAC Bus 2")
   parser.add_argument("--debug", action = "store_true", help = "Print incoming / outgoing MIDI signals")
