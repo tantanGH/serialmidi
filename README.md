@@ -1,9 +1,19 @@
 ## Modification Description
 
 [serialmidi](https://github.com/raspy135/serialmidi) is a great solution to construct a RS232C/UART bridged MIDI interface.
-This folked version is just adding pip installation capabilities. Dependent libraries are installed alltogether.
+This folked version is just adding pip installation capabilities.
+
+### Quick Install
 
     pip install git+https://github.com/tantanGH/serialmidi.git
+
+Dependent libraries are automatically installed alltogether.
+
+### Quick Start
+
+    serialmidi --serial_name=/dev/tty.usbserial-xxxx --midi_in_name="IAC Bus 1" --midi_out_name="IAC Bus 2"
+
+You can execute `serialmidi` as an executable application.
 
 Original repository:
 * [https://github.com/raspy135/serialmidi](https://github.com/raspy135/serialmidi)
