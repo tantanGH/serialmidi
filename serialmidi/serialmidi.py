@@ -11,6 +11,14 @@ import argparse
 # Serial MIDI Bridge
 # Ryan Kojima
 
+# global variables
+midi_ready = False
+thread_running = False
+serial_port_name = "/dev/tty.usbserial-"
+serial_baud = 9600
+given_port_name_in = "IAC Bus 1"
+given_port_name_out = "IAC Bus 2"
+
 def get_midi_length(message):
     if len(message) == 0:
         return 100
