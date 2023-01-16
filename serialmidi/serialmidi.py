@@ -11,35 +11,6 @@ import argparse
 # Serial MIDI Bridge
 # Ryan Kojima
 
-def main():
-
-  parser = argparse.ArgumentParser(description = "Serial MIDI bridge")
-
-  parser.add_argument("serial_name", type=str, required = True, help = "Serial port name. Required")
-  parser.add_argument("--baud", type=int, default=9600, help = "baud rate. Default is 9600")
-  parser.add_argument("--midi_in_name", type=str, default = "IAC Bus 1")
-  parser.add_argument("--midi_out_name", type=str, default = "IAC Bus 2")
-  parser.add_argument("--debug", action = "store_true", help = "Print incoming / outgoing MIDI signals")
-
-  args = parser.parse_args()
-
-  thread_running = True
-
-  # Arguments
-  serial_port_name = args.serial_name #'/dev/cu.SLAB_USBtoUART'
-  serial_baud = args.baud
-  given_port_name_in = args.midi_in_name #"IAC Bus 1"
-  given_port_name_out = args.midi_out_name #"IAC Bus 2"
-
-  if args.debug:
-    logging.basicConfig(level = logging.DEBUG)
-  else:
-    logging.basicConfig(level = logging.INFO)
-
-  midi_ready = False
-  midiin_message_queue = queue.Queue()
-  midiout_message_queue = queue.Queue()
-
 def get_midi_length(message):
     if len(message) == 0:
         return 100
@@ -159,32 +130,60 @@ def midi_watcher():
         midiout.send_message(message)
 
 
-try:
-    ser = serial.Serial(serial_port_name,serial_baud)
-except serial.serialutil.SerialException:
-    print("Serial port opening error.")
-    midi_watcher()
-    sys.exit()
+def main():
 
-ser.timeout = 0.4
+  parser = argparse.ArgumentParser(description = "Serial MIDI bridge")
 
-s_watcher = threading.Thread(target = serial_watcher)
-s_writer = threading.Thread(target = serial_writer)
-m_watcher = threading.Thread(target = midi_watcher)
+  parser.add_argument("--serial_name", type=str, required = True, help = "Serial port name. Required")
+  parser.add_argument("--baud", type=int, default=9600, help = "baud rate. Default is 9600")
+  parser.add_argument("--midi_in_name", type=str, default = "IAC Bus 1")
+  parser.add_argument("--midi_out_name", type=str, default = "IAC Bus 2")
+  parser.add_argument("--debug", action = "store_true", help = "Print incoming / outgoing MIDI signals")
 
-s_watcher.start()
-s_writer.start()
-m_watcher.start()
+  args = parser.parse_args()
 
-#Ctrl-C handler
-try:
-    while True:
-        time.sleep(1)
-except KeyboardInterrupt:
-    print("Terminating.")
-    thread_running = False
-    sys.exit(0)
+  thread_running = True
 
+  # Arguments
+  serial_port_name = args.serial_name #'/dev/cu.SLAB_USBtoUART'
+  serial_baud = args.baud
+  given_port_name_in = args.midi_in_name #"IAC Bus 1"
+  given_port_name_out = args.midi_out_name #"IAC Bus 2"
+
+  if args.debug:
+    logging.basicConfig(level = logging.DEBUG)
+  else:
+    logging.basicConfig(level = logging.INFO)
+
+  midi_ready = False
+  midiin_message_queue = queue.Queue()
+  midiout_message_queue = queue.Queue()
+
+  try:
+      ser = serial.Serial(serial_port_name,serial_baud)
+  except serial.serialutil.SerialException:
+      print("Serial port opening error.")
+      midi_watcher()
+      sys.exit()
+
+  ser.timeout = 0.4
+
+  s_watcher = threading.Thread(target = serial_watcher)
+  s_writer = threading.Thread(target = serial_writer)
+  m_watcher = threading.Thread(target = midi_watcher)
+
+  s_watcher.start()
+  s_writer.start()
+  m_watcher.start()
+
+  #Ctrl-C handler
+  try:
+      while True:
+          time.sleep(1)
+  except KeyboardInterrupt:
+      print("Terminating.")
+      thread_running = False
+      sys.exit(0)
 
 if __name__ == "__main__":
     main()
