@@ -1,1 +1,1 @@
-from serialmidi.serialmini import *
+from serialmidi.serialmidi import *
