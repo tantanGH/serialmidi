@@ -1,3 +1,17 @@
+## Modification Description
+
+[serialmidi](https://github.com/raspy135/serialmidi) is a great solution to construct a RS232C/UART bridged MIDI interface.
+This folked version is just adding pip installation capabilities.
+
+    pip install git+https://github.com/tantanGH/serialmidi.git
+
+Original repository:
+* [https://github.com/raspy135/serialmidi](https://github.com/raspy135/serialmidi)
+
+
+The below is the original README.md document.
+
+---
 
 This command line script establishes Serial to MIDI bridge.
 It will be useful with micro controller boards such as Arduino, ESP32, they only have UART-USB interface.
